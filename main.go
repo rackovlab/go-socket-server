@@ -24,6 +24,11 @@ func socketIoHandle(io *socketio.Io) {
 			socket.Emit("test", event.Data...)
 		})
 
+		// Listens for "test-broadcast" event and responds with the same data (Echo) and send to all room clients
+		socket.On("test-broadcast", func(event *socketio.EventPayload) {
+			socket.To("demo").Emit("test", event.Data...)
+		})
+
 		// Logs when a client starts disconnecting
 		socket.On("disconnecting", func(event *socketio.EventPayload) {
 			println("disconnecting", socket.Nps, socket.Id)
